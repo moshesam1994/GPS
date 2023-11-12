@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ActionMenuView;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.Manifest;
@@ -30,16 +32,24 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_FINE_LOCATION = 99;
-    TextView tv_lat, tv_lon, tv_altitude, tv_accuracy, tv_speed, tv_sensor, tv_address, tv_updates;
+    TextView tv_lat, tv_lon, tv_altitude, tv_accuracy, tv_speed, tv_sensor, tv_address, tv_updates, tv_wayPointCounts;
     Switch sw_locationupdates, sw_gps;
 
     public static final int DEFAULT_UPDATE_INTERVAL = 30;
     public static final int FAST_UPDATE_INTERVAL = 5;
     boolean updateOn = false;
+    //curent loction
+    Location cureentLocation;
+
+    //list of save loctin
+
+    List<Location> saveLocations;
+
+
     // loction
     LocationRequest locationRequest;
 
-
+    Button btn_showWayPointList, btn_newWayPoint, btn_showMap;
     LocationCallback locationCallback;
 
 
@@ -60,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
         tv_address = findViewById(R.id.tv_address);
         sw_gps = findViewById(R.id.sw_gps);
         sw_locationupdates = findViewById(R.id.sw_locationsupdates);
+        btn_newWayPoint = findViewById(R.id.btn_newWayPoint);
+        btn_showWayPointList = findViewById(R.id.btn_showWayPointList);
+        tv_wayPointCounts = findViewById(R.id.tv_contOfCrumbs);
+
+        btn_showMap = findViewById(R.id.btn_showMap);
 
 
         locationRequest = new LocationRequest();
@@ -70,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        locationCallback=new LocationCallback() {
+        locationCallback = new LocationCallback() {
 
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
@@ -79,6 +94,39 @@ public class MainActivity extends AppCompatActivity {
                 updateUIValues(locationResult.getLastLocation());
             }
         };
+
+
+        btn_newWayPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+
+
+                //
+                MyApplication myApplication = (MyApplication) getApplicationContext();
+                saveLocations = myApplication.getMyLocations();
+                saveLocations.add(cureentLocation);
+            }
+        });
+
+        btn_showWayPointList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ShowSacedLoctionList.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+        btn_showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         sw_gps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,13 +175,11 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
 
 
-
-
-
     }
+
     @SuppressLint("MissingPermission")
     private void startLoctionUpdate() {
-        tv_updates.setText("Loctiom is beng track");
+        tv_updates.setText("Location is not being track");
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
         updateGPS();
 
@@ -147,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     updateGPS();
                 } else {
-                    Toast.makeText(this, "This app requreir premtion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "This app require promotion", Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -160,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
                     updateUIValues(location);
+                    cureentLocation = location;
 
 
                 }
@@ -191,13 +238,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Geocoder geocoder=new Geocoder(MainActivity.this);
+        Geocoder geocoder = new Geocoder(MainActivity.this);
         try {
-            List<Address> addresses=geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             tv_address.setText(addresses.get(0).getAddressLine(0));
-        }catch (Exception e){
+        } catch (Exception e) {
             tv_address.setText("Unable to get street");
         }
 
+        MyApplication myApplication = (MyApplication) getApplicationContext();
+        saveLocations = myApplication.getMyLocations();
+
+        //show number of loctions
+
+        tv_wayPointCounts.setText(Integer.toString(saveLocations.size()));
     }
 }

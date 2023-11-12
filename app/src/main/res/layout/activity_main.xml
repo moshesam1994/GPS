@@ -155,7 +155,6 @@
         app:layout_constraintTop_toTopOf="@+id/tv_lbladdress" />
 
 
-
     <TextView
         android:id="@+id/tv_lbladdress"
         android:layout_width="100dp"
@@ -164,6 +163,7 @@
         android:text="Address:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_labelspeed" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="409dp"
@@ -171,45 +171,65 @@
         android:layout_marginTop="32dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/tv_address"
-        tools:layout_editor_absoluteX="1dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp" />
+
 
     <TextView
         android:id="@+id/tv_labelCrumbCounte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="28dp"
         android:text="wayPoint:"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
 
     <TextView
         android:id="@+id/tv_contOfCrumbs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="28dp"
         android:text="0"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelCrumbCounte"
-        tools:layout_editor_absoluteX="70dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintStart_toEndOf="@+id/tv_labelCrumbCounte"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sensor" />
 
     <Button
         android:id="@+id/btn_newWayPoint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="48dp"
         android:text="new way point"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelCrumbCounte" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelCrumbCounte"
+        />
 
     <Button
         android:id="@+id/btn_showWayPointList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Show Way Point List"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_newWayPoint" />
+
+    <Button
+        android:id="@+id/btn_showMap"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Show map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="494dp" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_showWayPointList" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
